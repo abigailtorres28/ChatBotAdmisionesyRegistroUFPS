@@ -1,0 +1,97 @@
+.chatContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  overflow-y: auto;
+  height: 100%;
+  background: white;
+}
+
+.message {
+  max-width: 70%;
+  margin-bottom: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 1.2rem;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  word-wrap: break-word;
+  position: relative;
+}
+
+.messageText {
+  margin-bottom: 0.5rem;
+}
+
+/* Bot (izquierda) */
+.assistant {
+  align-self: flex-start;
+  background-color: #f1f1f1;
+  color: #333;
+  border-bottom-left-radius: 0;
+}
+
+/* Usuario (derecha) */
+.user {
+  align-self: flex-end;
+  background-color: #d71920;
+  color: white;
+  border-bottom-right-radius: 0;
+}
+
+/* Bloque de fuente */
+.sourceBlock {
+  background-color: #e8e8e8;
+  border-radius: 0.6rem;
+  padding: 0.5rem 0.75rem;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #333;
+}
+
+.sourceToggle {
+  cursor: pointer;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  outline: none;
+}
+
+.sourceList {
+  margin: 0.5rem 0 0 1rem;
+  padding: 0;
+  list-style-type: disc;
+}
+
+.sourceItem {
+  margin-bottom: 0.5rem;
+}
+
+.typingIndicator {
+  display: flex;
+  gap: 4px;
+  font-size: 24px;
+  padding: 8px 0;
+  opacity: 0.7;
+  align-items: center;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #999;
+  animation: blink 1.4s infinite ease-in-out;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes blink {
+  0% { opacity: 0.2; }
+  20% { opacity: 1; }
+  100% { opacity: 0.2; }
+}

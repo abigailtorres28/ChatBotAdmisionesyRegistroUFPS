@@ -1,0 +1,22 @@
+.status {
+  font-size: 0.85rem;
+  margin: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+  transition: background 0.3s ease;
+}
+
+.connected {
+  background-color: #4caf50;
+}
+
+.disconnected {
+  background-color: #f44336;
+}
