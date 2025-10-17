@@ -7,17 +7,20 @@ import ChatHeader from "./components/ChatHeader/ChatHeader";
 import ProcessingPersonalData from "./components/ProcessingPersonalData/ProcessingPersonalData";
 import { useChatStore } from "./stores/chatStore";
 import RatingStars from "./components/RatingStars/RatingStars";
+import UserData from "./components/UserData/UserData";
 
 const ChatWidget: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [hasAcceptedDataProcessing, setHasAcceptedDataProcessing] = useState(false);
+  const [hasProvidedUserData, setHasProvidedUserData] = useState(false);
 
   const userRole = useChatStore((state) => state.userRole);
   const setUserRole = useChatStore((state) => state.setUserRole);
   const addMessage = useChatStore((state) => state.addMessage);
   const clearMessages = useChatStore((state) => state.clearMessages);
+  const setUserData = useChatStore((state) => state.setUserData);
   const hasGreeted = useRef(false);
   const ws = useRef<WebSocket | null>(null);
   const reconnectInterval = useRef<NodeJS.Timeout | null>(null);
@@ -75,7 +78,9 @@ const ChatWidget: React.FC = () => {
       setIsConnected(false);
       clearMessages();
       setUserRole(null);
-
+      setHasAcceptedDataProcessing(false);
+      setHasProvidedUserData(false);
+      hasGreeted.current = false;
       if (!reconnectInterval.current) {
         reconnectInterval.current = setInterval(() => {
           console.log("🔄 Intentando reconectar...");
@@ -102,13 +107,13 @@ const ChatWidget: React.FC = () => {
     setShowRating(true);
   };
 
-  const handleRated = (rating: number) => {
-    console.log("⭐ Calificación:", rating);
+  const handleRated = () => {
     setShowRating(false);
     setIsOpen(false);
     clearMessages();
     setUserRole(null);
     setHasAcceptedDataProcessing(false);
+    setHasProvidedUserData(false);
     hasGreeted.current = false;
   };
 
@@ -139,7 +144,7 @@ const ChatWidget: React.FC = () => {
       addMessage({
         id: crypto.randomUUID(),
         role: "assistant",
-        content: "¡Hola! ¿En qué puedo ayudarte?",
+        content: "Hola, soy ADMIA. Estoy para resolver tus dudas. ¿En qué te puedo ayudar?",
       });
       hasGreeted.current = true;
     }
@@ -176,6 +181,11 @@ const ChatWidget: React.FC = () => {
             <ProcessingPersonalData onAccept={() => setHasAcceptedDataProcessing(true)} />
           ) : !userRole ? (
             <RoleSelector ws={ws} />
+          ) : !hasProvidedUserData ? (
+            <UserData onAccept={(name, id) => {
+              setUserData({ name, id });
+              setHasProvidedUserData(true);
+            }} />
           ) : showRating ? (
             // ✅ Mostrar calificación
             <RatingStars onRate={handleRated} />
