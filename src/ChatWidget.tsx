@@ -4,13 +4,15 @@ import ChatHistory from "./components/ChatHistory/ChatHistory";
 import MessageInput from "./components/MessageInput/MessageInput";
 import RoleSelector from "./components/RoleSelector/RoleSelector";
 import ChatHeader from "./components/ChatHeader/ChatHeader";
+import ProcessingPersonalData from "./components/ProcessingPersonalData/ProcessingPersonalData";
 import { useChatStore } from "./stores/chatStore";
 import RatingStars from "./components/RatingStars/RatingStars";
 
 const ChatWidget: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
-  const [isTyping, setIsTyping] = useState(false); // 👈 NUEVO ESTADO
+  const [isTyping, setIsTyping] = useState(false);
+  const [hasAcceptedDataProcessing, setHasAcceptedDataProcessing] = useState(false);
 
   const userRole = useChatStore((state) => state.userRole);
   const setUserRole = useChatStore((state) => state.setUserRole);
@@ -106,6 +108,7 @@ const ChatWidget: React.FC = () => {
     setIsOpen(false);
     clearMessages();
     setUserRole(null);
+    setHasAcceptedDataProcessing(false);
     hasGreeted.current = false;
   };
 
@@ -169,6 +172,8 @@ const ChatWidget: React.FC = () => {
             <div className="p-4 text-center text-gray-600 animate-pulse">
               🔌 Reconectando...
             </div>
+          ) : !hasAcceptedDataProcessing ? (
+            <ProcessingPersonalData onAccept={() => setHasAcceptedDataProcessing(true)} />
           ) : !userRole ? (
             <RoleSelector ws={ws} />
           ) : showRating ? (
